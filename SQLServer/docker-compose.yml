@@ -4,3 +4,5 @@ services:
     restart: always
     build:
       dockerfile: Dockerfile
+    ports:
+      - 1433:1433
