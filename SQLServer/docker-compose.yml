@@ -1,0 +1,6 @@
+services:
+  sql_server:
+    container_name: sql_server
+    restart: always
+    build:
+      dockerfile: Dockerfile

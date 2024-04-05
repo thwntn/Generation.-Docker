@@ -1,0 +1,9 @@
+services:
+  redis:
+    container_name: redis
+    image: redis
+    build:
+      context: mem
+      dockerfile: Dockerfile
+    ports:
+      - 6379:6379
