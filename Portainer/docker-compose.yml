@@ -1,0 +1,11 @@
+services:
+  portainer:
+    conainer_name: portainer
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 9000:9000
+      - 9433:9433
+    volumes:
+      - docker.sock:/var/run/docker.sock
+      - portainer_data:/data
