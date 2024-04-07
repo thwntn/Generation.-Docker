@@ -7,5 +7,5 @@ services:
       - 9000:9000
       - 9433:9433
     volumes:
-      - docker.sock:/var/run/docker.sock
+      - dockersock:/var/run/docker.sock
       - portainer_data:/data
