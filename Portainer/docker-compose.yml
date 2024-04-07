@@ -1,6 +1,6 @@
 services:
   portainer:
-    conainer_name: portainer
+    container_name: portainer
     build:
       dockerfile: Dockerfile
     ports:
