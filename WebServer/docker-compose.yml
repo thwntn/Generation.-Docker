@@ -1,0 +1,10 @@
+version: '3'
+services:
+  server_web:
+    container_name: web_server
+    image: thwntn/website:portfolio
+    build:
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:80
+    restart: always
