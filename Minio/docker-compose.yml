@@ -1,0 +1,12 @@
+services:
+  minio:
+    image: minio/minio
+    volumes:
+      - ./minio-data:/data
+    ports:
+      - 6000:9000
+      - 6001:37407
+    environment:
+      MINIO_ACCESS_KEY: "minioexample"
+      MINIO_SECRET_KEY: "minioexample@123"
+    command: server /minio-data/data

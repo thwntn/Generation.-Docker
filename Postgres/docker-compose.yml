@@ -1,9 +1,10 @@
 services:
-
   db:
     container_name: postgres
     restart: always
     build:
       dockerfile: Dockerfile
+    volumes:
+      - ./data:/dump
     ports:
       - 5432:5432
