@@ -2,6 +2,5 @@ services:
   ubuntu:
     container_name: ubuntu_cron
     build:
+      context: ubuntu_cron:dev
       dockerfile: ./Dockerfile
-    tags:
-      - ubuntu_cron:dev
