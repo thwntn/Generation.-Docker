@@ -1,0 +1,20 @@
+services:
+  sonarqube:
+    container_name: sonarqube
+    build:
+      dockerfile: ./sonarqube/Dockerfile
+    depends_on:
+      - sonarqube_database
+    ports:
+      - 8546:9000
+    volumes:
+      - ./sonarqube/data:/data
+      - ./sonarqube/logs:/logs
+      - ./sonarqube/extensions:/extensions
+
+  sonarqube_database:
+    container_name: sonarqube_database
+    build:
+      dockerfile: ./database/Dockerfile
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
