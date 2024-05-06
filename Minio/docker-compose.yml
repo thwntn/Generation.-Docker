@@ -1,12 +1,11 @@
 services:
   minio:
-    image: minio/minio
+    container_name: minio
+    user: root
+    build:
+      dockerfile: ./Dockerfile
     volumes:
-      - ./minio-data:/data
+      - ./data:/bitnami/minio/data:rwx
     ports:
-      - 6000:9000
-      - 6001:37407
-    environment:
-      MINIO_ACCESS_KEY: "minioexample"
-      MINIO_SECRET_KEY: "minioexample@123"
-    command: server /minio-data/data
+      - 7000:9000
+      - 7001:9001

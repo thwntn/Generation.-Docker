@@ -3,3 +3,6 @@ services:
     container_name: ubuntu_cron
     build:
       dockerfile: ./Dockerfile
+    volumes:
+      - ./data:/dump
+    
