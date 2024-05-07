@@ -2,7 +2,10 @@ services:
   sql_server:
     container_name: sql_server
     restart: always
+    user: root
     build:
       dockerfile: Dockerfile
     ports:
       - 1433:1433
+    volumes:
+      - ./.data:/var/opt/mssql
