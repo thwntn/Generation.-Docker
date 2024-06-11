@@ -2,8 +2,13 @@ services:
   redis:
     container_name: redis
     image: redis
+    volumes:
+      - redis_data:/usr/local/etc/redis
     build:
       context: mem
       dockerfile: Dockerfile
     ports:
       - 6379:6379
+
+volumes:
+  redis_data:
