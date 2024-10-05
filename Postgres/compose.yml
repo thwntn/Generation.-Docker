@@ -5,7 +5,7 @@ services:
     image: postgres
 
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: postgres-titanco-dev-nonee-jdbc-poiwz
 
     volumes:
       - ./data:/var/lib/postgresql/data
