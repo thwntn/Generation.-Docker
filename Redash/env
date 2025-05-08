@@ -1,0 +1,6 @@
+REDASH_SECRET_KEY=wer89203rjlwerjwel
+REDASH_COOKIE_SECRET=dshjlsjewpndflsgnd1290wekeprwe
+
+
+POSTGRES_PASSWORD=postgres@intecom
+POSTGRES_HOST_AUTH_METHOD=trust

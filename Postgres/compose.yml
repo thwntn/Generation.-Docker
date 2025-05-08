@@ -1,0 +1,14 @@
+services:
+  database:
+    container_name: postgres
+    restart: always
+    image: postgres
+
+    environment:
+      POSTGRES_PASSWORD: postgres-titanco-dev-nonee-jdbc-poiwz
+
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+    ports:
+      - 5432:5432
