@@ -1,0 +1,16 @@
+services:
+  mariadb:
+    image: mariadb:11.3
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: i@Password123
+      MYSQL_DATABASE: TitanCo
+      MYSQL_USER: thwntn
+      MYSQL_PASSWORD: i@Thwntn849686
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+volumes:
+  mariadb_data:
