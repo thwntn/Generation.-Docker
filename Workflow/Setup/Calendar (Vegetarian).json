@@ -1,0 +1,224 @@
+{
+  "name": "Lịch (thực đơn)",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "898ae464-5978-4041-b2b5-a8212029d14f",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        280,
+        -160
+      ],
+      "id": "bc16bf3c-4f3e-4de9-9cc3-29e29f0e2f9b",
+      "name": "Kiểm tra ngày (đúng, khác)"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  data:\n    $input.all().filter((item) => {\n      const date = new Date(item.json.lunarDate);\n      return [8, 13, 15, 18, 23, 27, 28, 29, 30, 31].includes(date.getDate());\n    }).length > 0,\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -120
+      ],
+      "id": "7aab3d1d-a6df-4f49-88e7-81bd9ad84a49",
+      "name": "Xử lý dữ liệu"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:6501/lunar/current",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9maWxlSWQiOiI0OTAzOTM0ZS1jOWQxLTQ5MzktOTMxNC01YjMyZDA4Mzc2YjIiLCJBY2NvdW50SWQiOiI1ZjJiNTk4Ni0xNWExLTQyNGEtOTRiNS1lYmEyZTlkMTg2ODQiLCJQYXJlbnRJZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsIm5iZiI6MTc0OTM2OTY1NSwiZXhwIjoxNzQ5OTc0NDU1LCJpYXQiOjE3NDkzNjk2NTUsImlzcyI6Ikp3dElzc3VlciIsImF1ZCI6Ikp3dEF1ZGllbmNlIn0.ogsxWQUbEXYPBf-1cm85so0zuD9ggD0cytzloDxX-VQ"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -200
+      ],
+      "id": "29310fc8-1580-4e14-851c-7a1d8141ccbc",
+      "name": "Xem ngày âm (hôm nay)"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 17
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -480,
+        -300
+      ],
+      "id": "967a5449-1862-4862-bbcd-b1e429112093",
+      "name": "Lập lịch chạy (mỗi ngày 1 lần vào 5AM)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer xoxb-7131660631219-9009670702803-3juygfSHXwRCbz9h0teiNHFY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"channel\": \"#general\",\n  \"text\": \"<@nttansv> 📅 Lịch hôm nay đây!\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": {\n        \"type\": \"plain_text\",\n        \"text\": \"📅 LỊCH HÔM NAY — DƯƠNG & ÂM LỊCH\",\n        \"emoji\": true\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"fields\": [\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Dương lịch:*\\nThứ Bảy, 8/6/2025\"\n        },\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Âm lịch:*\\n13 tháng 5, năm Giáp Thìn\"\n        }\n      ]\n    },\n    {\n      \"type\": \"divider\"\n    },\n    {\n      \"type\": \"context\",\n      \"elements\": [\n        {\n          \"type\": \"plain_text\",\n          \"text\": \"✨ Hôm nay là ngày ăn chay. Chúc bạn một ngày may mắn và nhiều năng lượng! <@nttansv>\",\n          \"emoji\": true\n        }\n      ]\n    }\n  ]\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        -280
+      ],
+      "id": "385a7efe-4e65-4f70-87bf-d8efcf05805f",
+      "name": "Tin nhắn qua Slack"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer xoxb-7131660631219-9009670702803-3juygfSHXwRCbz9h0teiNHFY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"channel\": \"#general\",\n  \"text\": \"<@nttansv> 📅 Lịch hôm nay đây!\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": {\n        \"type\": \"plain_text\",\n        \"text\": \"📅 LỊCH HÔM NAY — DƯƠNG & ÂM LỊCH\",\n        \"emoji\": true\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"fields\": [\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Dương lịch:*\\nThứ Bảy, 8/6/2025\"\n        },\n        {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Âm lịch:*\\n13 tháng 5, năm Giáp Thìn\"\n        }\n      ]\n    },\n    {\n      \"type\": \"divider\"\n    },\n    {\n      \"type\": \"context\",\n      \"elements\": [\n        {\n          \"type\": \"plain_text\",\n          \"text\": \"✨ Hôm nay là ngày ăn gì cũng được. Chúc bạn một ngày may mắn và nhiều năng lượng! <@nttansv>\",\n          \"emoji\": true\n        }\n      ]\n    }\n  ]\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        -40
+      ],
+      "id": "956d113c-ec29-4dbf-abe0-d7ac270b11dc",
+      "name": "Chào buổi "
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Kiểm tra ngày (đúng, khác)": {
+      "main": [
+        [
+          {
+            "node": "Tin nhắn qua Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chào buổi ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Xử lý dữ liệu": {
+      "main": [
+        [
+          {
+            "node": "Kiểm tra ngày (đúng, khác)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Xem ngày âm (hôm nay)": {
+      "main": [
+        [
+          {
+            "node": "Xử lý dữ liệu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lập lịch chạy (mỗi ngày 1 lần vào 5AM)": {
+      "main": [
+        [
+          {
+            "node": "Xem ngày âm (hôm nay)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d3b8d2f5-3e47-4ddc-92c1-b1db30098062",
+  "meta": {
+    "instanceId": "3441d980822496786ddaf1f3f3344f8e48b1d81abe3438dda1300c0ad4b8616e"
+  },
+  "id": "0K1XoBu1Jwub9unP",
+  "tags": []
+}
