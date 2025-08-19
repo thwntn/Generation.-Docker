@@ -1,0 +1,30 @@
+services:
+  redmine:
+    build: .
+    restart: always
+    ports:
+      - "8080:3000"
+    environment:
+      REDMINE_DB_MYSQL: db
+      REDMINE_DB_PASSWORD: root@mysqladmin
+      REDMINE_SECRET_KEY_BASE: redmineadmin@secret
+    depends_on:
+      - db
+    volumes:
+      - redmine_data:/usr/src/redmine/files
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root@mysqladmin
+      MYSQL_DATABASE: redmine
+      MYSQL_USER: redmine
+      MYSQL_PASSWORD: root@mysqladmin
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  redmine_data:
+  db_data:
